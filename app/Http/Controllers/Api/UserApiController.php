@@ -32,15 +32,17 @@ class UserApiController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6',
             'role' => 'required|in:voter,admin',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
+        // Set password default
+        $validated['password'] = Hash::make('password');
+
         $user = User::create($validated);
 
         return response()->json(['message' => 'User created successfully', 'data' => $user], 201);
     }
+
 
     // PUT /api/users/{id}
     public function update(Request $request, $id)
